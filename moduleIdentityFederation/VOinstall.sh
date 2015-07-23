@@ -7,7 +7,9 @@ echo "========================="
 echo "V0.1"
 echo "PGID 2015"
 echo "========================="
-
+echo "========================="
+echo "Info: This wizard will guide you to configure your Identity Federation Module. Please, complete all requests with non-capital letters."
+echo "Run as root or using sudo."
 
 # name of pkgs
 $apache = "apache2"
