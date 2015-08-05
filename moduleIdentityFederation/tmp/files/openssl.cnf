@@ -1,0 +1,30 @@
+[ req ]
+default_bits = 4096 # Size of keys
+string_mask = nombstr # permitted characters
+distinguished_name = req_distinguished_name
+ 
+[ req_distinguished_name ]
+# Variable name   Prompt string
+#----------------------   ----------------------------------
+0.organizationName = eeeeeeeee
+organizationalUnitName = $DEPARTMENT
+emailAddress = $EMAIL
+emailAddress_max = 40
+localityName = $CITY
+stateOrProvinceName = $STATE
+countryName = $COUNTRY
+countryName_min = 2
+countryName_max = 2
+commonName = $HOST
+commonName_max = 64
+ 
+# Default values for the above, for consistency and less typing.
+# Variable name   Value
+#------------------------------   ------------------------------
+0.organizationName_default = eeeeeeeee
+organizationalUnitName_default = $DEPARTMENT
+emailAddress_default = $EMAIL
+localityName_default = $CITY
+stateOrProvinceName_default = $STATE
+countryName_default = $COUNTRY
+commonName_default = $HOST
