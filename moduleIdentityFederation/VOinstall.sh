@@ -91,9 +91,15 @@ sed -i "s/"\$HOST"/${HOST}/g" $opensslcnf
 echo "File $opensslcnf updated."
 echo "Generating OpenSSL certs..."
 
+# Configure web server
 
-# metadata federation configure 
+# Configure Shibboleth Client
+
+
+# Configure metadata federation 
 read -p "Please, inform the file (with full web address) of metadata file (e.g. https://mmyfederation.across.br/ds/metadata.xml: " metaov
 echo $metaov
 
-#
+# Configure Attribute List
+
+# Verify Attributes supported
