@@ -18,6 +18,14 @@ echo "Warning! Run as root or using sudo."
 echo "***********************************"
 echo "***********************************"
 
+# Start AP Install
+
+# Install LDAP
+
+# Configure LDAP
+
+# Validate AP Configuration
+
 # name of pkgs
 apache="apache2"
 shib="shibboleth"

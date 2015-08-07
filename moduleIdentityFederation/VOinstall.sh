@@ -17,6 +17,9 @@ echo "Warning! Run as root or using sudo."
 echo "***********************************"
 echo "***********************************"
 
+# Start VO Install
+
+# Install Packages
 # name of pkgs
 apache="apache2"
 shib="shibboleth"
@@ -63,6 +66,8 @@ if [ "" == "$PKG_OK" ]; then
   sudo apt-get --force-yes --yes -qq install $modshib
 fi
 
+# Configure Web Server
+
 ##################################
 # generate SSL cert
 ##################################
@@ -91,8 +96,6 @@ sed -i "s/"\$HOST"/${HOST}/g" $opensslcnf
 echo "File $opensslcnf updated."
 echo "Generating OpenSSL certs..."
 
-# Configure web server
-
 # Configure Shibboleth Client
 
 
@@ -102,4 +105,4 @@ echo $metaov
 
 # Configure Attribute List
 
-# Verify Attributes supported
+# Verify Attributes

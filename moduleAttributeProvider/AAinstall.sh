@@ -18,6 +18,12 @@ echo "Warning! Run as root or using sudo."
 echo "***********************************"
 echo "***********************************"
 
+# Start AA Install
+
+# Configure AA
+
+# Validate AA Configuration
+
 # name of pkgs
 apache="apache2"
 shib="shibboleth"
