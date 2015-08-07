@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "========================="
-echo " Starting VO Install"
+echo " Starting AP Install"
 echo "========================="
 echo "========================="
 echo "V0.1"
@@ -9,8 +9,9 @@ echo "PGID 2015"
 echo "========================="
 echo "========================="
 echo "Info: This wizard will guide you to configure"
-echo "your Identity Federation Module. Please, "
-echo "complete all requests with non-capital letters."
+echo "your Attribute Provider Module
+echo "step: APInstall. 
+echo "Please, complete all requests with non-capital letters."
 echo "***********************************"
 echo "***********************************"
 echo "Warning! Run as root or using sudo."
