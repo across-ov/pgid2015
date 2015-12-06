@@ -1,16 +1,18 @@
 #!/bin/bash
 
-echo "========================="
+clear
+
+echo "======================================================="
 echo " Starting AP Install"
-echo "========================="
-echo "========================="
+echo "======================================================="
+echo "======================================================="
 echo "V0.1"
 echo "PGID 2015"
-echo "========================="
-echo "========================="
+echo "======================================================="
+echo "======================================================="
 echo "Info: This wizard will guide you to configure"
-echo "your Attribute Provider Module
-echo "step: APInstall. 
+echo "your Attribute Provider Module"
+echo "step: APInstall." 
 echo "Please, complete all requests with non-capital letters."
 echo "***********************************"
 echo "***********************************"
@@ -21,88 +23,205 @@ echo "***********************************"
 # Start AP Install
 
 # Install LDAP
-
-# Configure LDAP
-
-# Validate AP Configuration
-
-# name of pkgs
-apache="apache2"
-shib="shibboleth"
-modshib="libapache2-mod-shib2"
-
-read -p "VO name (e.g. across): " ovname
-read -p "IP address (e.g. 200.193.144.3): " ip
-read -p "FQDN address (e.g. across.fibre.org.br): " fqdn
-
-#echo $ovname $ip $fqdn
-
-# create $ovname folder and copy files
-mkdir $ovname
-cp -r files/ $ovname/
+ldap="slapd ldap-utils"
 
 echo "Updating package list.."
-apt-get -qq update  # To get the latest package lists
+#apt-get -qq update  # To get the latest package lists
+
 
 # check if packages was installed
-# Apache2
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $apache|grep "install ok installed")
-echo Checking for somelib: $apache was installed
+# slapd and ldap-utils
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $slapd|grep "install ok installed")
+echo Checking for somelib: $slapd was installed
 if [ "" == "$PKG_OK" ]; then
-  echo "No $apache ... Setting up $apache ..."
+  echo "No $slapd ... Setting up $slapd ..."
   echo "Download and install Apache"
   sudo apt-get --force-yes --yes -qq install $apache
 fi
- 
-# Shibolleth 2.X
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $shib|grep "install ok installed")
-echo Checking for somelib: $shib was installed
-if [ "" == "$PKG_OK" ]; then
-  echo "No $shib ... Setting up $shib ..."
-  echo "Download and install Apache"
-  sudo apt-get --force-yes --yes -qq install $shib
-fi
- 
-# mod_shib
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $modshib|grep "install ok installed")
-echo Checking for somelib: $modshib was installed
-if [ "" == "$PKG_OK" ]; then
-  echo "No $modshib ... Setting up $modshib ..."
-  echo "Download and install Apache"
-  sudo apt-get --force-yes --yes -qq install $modshib
-fi
 
-##################################
-# generate SSL cert
-##################################
-ed -p "IP: " $ip
-echo Please fill the fields
-read -p "Institution: " INSTITUTION
-read -p "Department: " DEPARTMENT
-read -p "email: " EMAIL
-read -p "City: " CITY
-read -p "State or Province: " STATE
-read -p "Country: " COUNTRY
-HOST=$ip
+# Configure LDAP
+echo "VO name (e.g. across) - Max 6 characters: " 
+read -n6 organization
+echo ""
 
-echo $INSTITUTION
-# edit $ovname/files/openssl.cnf configure and run openssl to generate certs
-opensslcnf="$ovname/files/openssl.cnf"
-sed -i "s/"\$INSTITUTION"/${INSTITUTION}/g" $opensslcnf
-sed -i "s/"\$DEPARTMENT"/${DEPARTMENT}/g" $opensslcnf
-sed -i "s/"\$EMAIL"/${EMAIL}/g" $opensslcnf
-sed -i "s/"\$CITY"/${CITY}/g" $opensslcnf
-sed -i "s/"\$STATE"/${STATE}/g" $opensslcnf
-sed -i "s/"\$COUNTRY"/${COUNTRY}/g" $opensslcnf
-sed -i "s/"\$HOST"/${HOST}/g" $opensslcnf
+echo "LDAP manager (cn=Manager,dc=$organization,dc=across) password: "
+read -s passwd
+
+# Converting to LDAP hash format
+password="$(slappasswd -s $passwd)"
+
+# replacing / to \/ for sed replaces
+password=${password/\//\\/}
+#echo $password
 
 
-echo "File $opensslcnf updated."
-echo "Generating OpenSSL certs..."
+echo ""
+user="cn=Manager,dc=$organization,dc=across"
 
+# Creating attributes
+# reserved OID for experimental attributes 1.3.6.1.4.1.4203.666.XXX
+# RFC 4517
+#	Syntax                           OBJECT IDENTIFIER
+#      ==============================================================
+#      Attribute Type Description       1.3.6.1.4.1.1466.115.121.1.3
+#      Bit String                       1.3.6.1.4.1.1466.115.121.1.6
+########### Selected
+#      Boolean                          1.3.6.1.4.1.1466.115.121.1.7
+#      Country String                   1.3.6.1.4.1.1466.115.121.1.11
+#      Delivery Method                  1.3.6.1.4.1.1466.115.121.1.14
+########### Selected
+#      Directory String                 1.3.6.1.4.1.1466.115.121.1.15
+#      DIT Content Rule Description     1.3.6.1.4.1.1466.115.121.1.16
+#      DIT Structure Rule Description   1.3.6.1.4.1.1466.115.121.1.17
+#      DN                               1.3.6.1.4.1.1466.115.121.1.12
+#      Enhanced Guide                   1.3.6.1.4.1.1466.115.121.1.21
+#      Facsimile Telephone Number       1.3.6.1.4.1.1466.115.121.1.22
+#      Fax                              1.3.6.1.4.1.1466.115.121.1.23
+#      Generalized Time                 1.3.6.1.4.1.1466.115.121.1.24
+#      Guide                            1.3.6.1.4.1.1466.115.121.1.25
+#      IA5 String                       1.3.6.1.4.1.1466.115.121.1.26
+########## Selected
+#      Integer                          1.3.6.1.4.1.1466.115.121.1.27
+#      JPEG                             1.3.6.1.4.1.1466.115.121.1.28
+#      LDAP Syntax Description          1.3.6.1.4.1.1466.115.121.1.54
+#      Matching Rule Description        1.3.6.1.4.1.1466.115.121.1.30
+#      Matching Rule Use Description    1.3.6.1.4.1.1466.115.121.1.31
+#      Name And Optional UID            1.3.6.1.4.1.1466.115.121.1.34
+#      Name Form Description            1.3.6.1.4.1.1466.115.121.1.35
+#      Numeric String                   1.3.6.1.4.1.1466.115.121.1.36
+#      Object Class Description         1.3.6.1.4.1.1466.115.121.1.37
+#      Octet String                     1.3.6.1.4.1.1466.115.121.1.40
+#      OID                              1.3.6.1.4.1.1466.115.121.1.38
+#      Other Mailbox                    1.3.6.1.4.1.1466.115.121.1.39
+#      Postal Address                   1.3.6.1.4.1.1466.115.121.1.41
+#      Printable String                 1.3.6.1.4.1.1466.115.121.1.44
+#      Substring Assertion              1.3.6.1.4.1.1466.115.121.1.58
+#      Telephone Number                 1.3.6.1.4.1.1466.115.121.1.50
+#      Teletex Terminal Identifier      1.3.6.1.4.1.1466.115.121.1.51
+#      Telex Number                     1.3.6.1.4.1.1466.115.121.1.52
+#      UTC Time                         1.3.6.1.4.1.1466.115.121.1.53
 
-# metadata federation configure 
-read -p "Please, inform the file (with full web address) of metadata file (e.g. https://mmyfederation.across.br/ds/metadata.xml: " metaov
-echo $metaov
+# store VO attributes
 
-#
+echo "========================================"
+echo ""
+read -p "Please, inform how many attributes will be registered: " nofattr
+
+schema="files/across.schema"
+
+echo "# VO attributes schema from $organization" > $schema
+        COUNTER=1
+
+        while [  $COUNTER -le $nofattr ]; do
+		echo ""
+                echo "******* Setting attribute number $COUNTER ********"
+		echo ""
+                read -p "Attribute name: " attrname[$COUNTER]
+                read -p "Attribute description: " attrdesc
+                echo "Select Attribute type "
+                        echo "1) String"
+                        echo "2) Integer"
+                        echo "3) Boolean"
+                read -p "Option number -> " opt
+                        case $opt in
+                                '1')
+                                        echo "attributetype (1.3.6.1.4.1.4203.666.$COUNTER" >> $schema
+                                        echo "  NAME ('${attrname[$COUNTER]}')" >> $schema
+                                        echo "  DESC '$attrdesc'" >> $schema
+                                        echo "  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )" >> $schema
+                                        ;;
+                                '2')
+                                        echo "attributetype (1.3.6.1.4.1.4203.666.$COUNTER" >> $schema
+                                        echo "  NAME ('${attrname[$COUNTER]}')" >> $schema
+                                        echo "  DESC '$attrdesc'" >> $schema
+                                        echo "  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )" >> $schema
+                                        ;;
+                                '3')
+                                        echo "attributetype (1.3.6.1.4.1.4203.666.$COUNTER" >> $schema
+                                        echo "  NAME ('${attrname[$COUNTER]}')" >> $schema
+                                        echo "  DESC '$attrdesc'" >> $schema
+                                        echo "  SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )" >> $schema
+                                        ;;
+                                *) echo invalid option;;
+                        esac
+                let COUNTER=COUNTER+1
+         done
+
+echo "# --------------------------------------" >> $schema
+echo "# ObjectClasses" >> $schema
+echo "# --------------------------------------" >> $schema
+echo "objectClass (1.3.6.1.4.1.4203.666.1.100 NAME 'across'" >> $schema
+echo "	DESC 'Across schema from $organization'" >> $schema
+#echo "	SUP 'top'" >> $schema
+echo "	AUXILIARY" >> $schema
+listattr="	MAY ("
+        COUNTER=1
+        while [  $COUNTER -le $nofattr ]; do
+		 listattr="$listattr ${attrname[$COUNTER]}"
+			if [ $COUNTER -lt $nofattr ]
+			then
+				listattr="$listattr $"
+			fi
+		let COUNTER=COUNTER+1
+	done
+echo "$listattr ) )" >> $schema
+#echo ")" >> $schema
+
+########################### schema created ################
+########################### create sladp.conf ############
+
+echo ""
+echo "================ Setting slapd.conf ================="
+echo ""
+echo "Stoping LDAP daemon, slapd."
+service slapd stop
+
+echo "Cleaning database at /var/lib/ldap..."
+rm -fr /var/lib/ldap/*
+
+echo "Moving /etc/ldap/slapd.d to slapd.d.old"
+mv /etc/ldap/slapd.d /etc/ldap/slapd.d.old 
+
+echo "Creating file /var/lib/ldap/DB_CONFIG"
+cp files/DB_CONFIG.template files/DB_CONFIG.$organization
+cp files/DB_CONFIG.$organization /var/lib/ldap/DB_CONFIG
+
+echo "Gerando arquivos de configuração..."
+cp files/slapd.conf.template files/slapd.conf.$organization
+
+slapd="files/slapd.conf.$organization"
+#sed -i "s/"\$ID"/${ID}/g" $slapd
+sed -i "s/"\$password"/${password}/g" $slapd
+sed -i "s/"\$organization"/${organization}/g" $slapd
+
+# Copying to correct LDAP directory
+cp $slapd /etc/ldap/slapd.conf
+
+# Populate LDAP base
+echo ""
+echo "Populating LDAP base from dc=$organization,dc=across"
+cp files/base.ldif.template files/base.ldif.$organization
+
+base="files/base.ldif.$organization"
+sed -i "s/"\$organization"/${organization}/g" $base
+sed -i "s/"\$password"/${password}/g" $base
+
+slapadd -b "dc=across" -v -l $base
+
+# copy new VO schema
+cp $schema /etc/ldap/schema/
+
+echo "Fix permission of /var/lib/ldap/"
+chown -R openldap /var/lib/ldap/
+
+echo "Starting slapd again..."
+service slapd start
+
+# Validate AP Configuration
+
+echo "*******************************************"
+echo "Validating Install and Configuration..."
+
+ldapsearch -D "cn=Manager,dc=$organization,dc=across" -x -w $password -b dc=across -s sub "objectclass=*"
+
+# End

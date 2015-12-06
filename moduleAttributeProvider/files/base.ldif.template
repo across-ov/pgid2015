@@ -1,0 +1,71 @@
+dn: dc=across
+objectClass: organization
+objectClass: dcObject
+objectClass: top
+dc: across
+o: across
+structuralObjectClass: organization
+entryUUID: 9b93211c-9cc8-1033-925b-8bdde3ad8ed0
+creatorsName: cn=Manager,dc=$organization,dc=across
+createTimestamp: 20140710215510Z
+entryCSN: 20140710215510.474635Z#000000#007#000000
+modifiersName: cn=Manager,dc=$organization,dc=across
+modifyTimestamp: 20140710215510Z
+contextCSN: 20151002044035.784803Z#000000#008#000000
+
+dn: dc=$organization,dc=across
+objectClass: organization
+objectClass: dcObject
+objectClass: top
+dc: $organization
+o: $organization
+structuralObjectClass: organization
+entryUUID: 00fdfa84-06e8-1034-8f5d-2b14a731af0d
+creatorsName: cn=Manager,dc=$organization,dc=across
+createTimestamp: 20141122230658Z
+entryCSN: 20141122230658.277811Z#000000#008#000000
+modifiersName: cn=Manager,dc=$organization,dc=across
+modifyTimestamp: 20141122230658Z
+contextCSN: 20141122231454.300529Z#000000#008#000000
+
+dn: cn=Manager,dc=$organization,dc=across
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: Manager
+userPassword:: $password
+description: LDAP administrator
+structuralObjectClass: organizationalRole
+entryUUID: 018a0e98-06e8-1034-8f5e-2b14a731af0d
+creatorsName: cn=Manager,dc=$organization,dc=across
+createTimestamp: 20141122230659Z
+entryCSN: 20141122230659.195828Z#000000#008#000000
+modifiersName: cn=Manager,dc=$organization,dc=across
+modifyTimestamp: 20141122230659Z
+
+# teste:teste (user:passwd)
+dn: uid=teste,dc=$organization,dc=across
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: eduPerson
+objectClass: brPerson
+objectClass: schacPersonalCharacteristics
+objectClass: across
+cn: Teste
+sn: ACROSS
+schacCountryOfCitizenship: Brazil
+mail: "across@gmail.com"
+eduPersonPrincipalName: teste@$organization.br
+homeDirectory: /home/$organization/teste
+uidNumber: 123456
+gidNumber: 5000
+structuralObjectClass: inetOrgPerson
+entryUUID: 963c0d52-06e8-1034-8f63-2b14a731af0d
+creatorsName: cn=Manager,dc=organization,dc=across
+createTimestamp: 20141122231108Z
+uid: teste
+userPassword:: {SSHA}HZlXg9WwMylJwyDjw+yMzLDHkWwtJFIl
+entryCSN: 20150219195733.337085Z#000000#008#000000
+modifiersName: cn=Manager,dc=$organization,dc=across
+modifyTimestamp: 20150219195733Z
+

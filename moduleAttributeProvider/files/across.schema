@@ -1,0 +1,16 @@
+# VO attributes schema from myvo
+attributetype (1.3.6.1.4.1.4203.666.1
+  NAME ('teste')
+  DESC ''
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+attributetype (1.3.6.1.4.1.4203.666.2
+  NAME ('teste2')
+  DESC ''
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )
+# --------------------------------------
+# ObjectClasses
+# --------------------------------------
+objectClass (1.3.6.1.4.1.4203.666.1.100 NAME 'across'
+	DESC 'Across schema from myvo'
+	AUXILIARY
+	MAY ( teste $ teste2 ) )

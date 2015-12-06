@@ -1,0 +1,88 @@
+#########################################
+# File: slapd.conf                    	#
+# V 1.0 	                        #
+# Date 21/11/2015			#
+# Edelberto Franco Silva (UFF)   	#
+#########################################
+
+# Across basic LDAP schemas
+
+include /etc/ldap/schema/core.schema
+include /etc/ldap/schema/cosine.schema
+include /etc/ldap/schema/nis.schema
+#include /etc/ldap/schema/inetorgperson.schema
+#include /etc/ldap/schema/eduperson.schema
+#include /etc/ldap/schema/breduperson.schema
+#include /etc/ldap/schema/schac.schema
+include /etc/ldap/schema/across.schema
+#include /etc/ldap/schema/openldap.schema
+#include /etc/ldap/schema/openssh-lpk_openldap.schema
+
+# PID and initial params from openldap
+
+pidfile /var/run/slapd/slapd.pid
+argsfile /var/run/slapd/slapd.args
+
+# Logs
+loglevel 0
+loglevel stats config
+loglevel 15
+logfile /var/log/ldap.log
+
+
+# ldap modules
+modulepath /usr/lib/ldap
+
+moduleload back_ldap.la
+moduleload back_hdb.la
+moduleload memberof.la
+moduleload syncprov.la
+
+authz-regexp "gidNumber=0\\\+uidNumber=0,cn=peercred,cn=external,cn=auth"
+                "cn=Manager,dc=$organization,dc=across"
+
+sizelimit -1
+
+# Direitos de acesso dos usuarios
+
+access to dn.base="" by * read
+
+access to *
+        by dn="cn=Manager,dc=$organization,dc=across" write
+        by * read
+
+serverID 009
+
+#######################################################################
+# ldbm and/or bdb database definitions
+#######################################################################
+
+#################################################
+######## ACROSS Attribute Provider ##############
+#################################################
+
+database hdb
+suffix "dc=across"
+checkpoint 1024 15
+cachesize 100000
+rootdn "cn=Manager,dc=$organization,dc=across"
+rootpw $password
+
+# Mode 700 recommended.
+directory /var/lib/ldap
+
+
+############################################
+
+index objectClass eq,pres
+index ou,cn,mail,surname,givenname eq,pres,sub
+
+# Extras
+index dc eq
+lastmod on
+overlay memberof
+
+##################
+# 	EOF 	 #
+##################
+
