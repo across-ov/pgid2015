@@ -137,7 +137,7 @@ echo "# VO attributes schema from $organization" > $schema
                                         echo "attributetype (1.3.6.1.4.1.4203.666.$COUNTER" >> $schema
                                         echo "  NAME ('${attrname[$COUNTER]}')" >> $schema
                                         echo "  DESC '$attrdesc'" >> $schema
-                                        echo "  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )" >> $schema
+                                        echo "  SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )" >> $schema
                                         ;;
                                 '3')
                                         echo "attributetype (1.3.6.1.4.1.4203.666.$COUNTER" >> $schema

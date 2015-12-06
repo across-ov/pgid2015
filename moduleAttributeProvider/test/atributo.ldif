@@ -1,0 +1,8 @@
+dn: cn=1,dc=myvo,dc=across
+objectclass: person
+objectclass: across
+objectclass: top
+# outrattr boolean
+sn: myvo
+cn: 1
+outroattr: TRUE
