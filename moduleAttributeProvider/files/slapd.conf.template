@@ -65,8 +65,8 @@ database hdb
 suffix "dc=across"
 checkpoint 1024 15
 cachesize 100000
-rootdn "cn=Manager,dc=$organization,dc=across"
-rootpw $password
+#rootdn "cn=Manager,dc=$organization,dc=across"
+#rootpw $password
 
 # Mode 700 recommended.
 directory /var/lib/ldap

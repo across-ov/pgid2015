@@ -32,7 +32,7 @@ dn: cn=Manager,dc=$organization,dc=across
 objectClass: organizationalRole
 objectClass: simpleSecurityObject
 cn: Manager
-userPassword:: $password
+userPassword: $password
 description: LDAP administrator
 structuralObjectClass: organizationalRole
 entryUUID: 018a0e98-06e8-1034-8f5e-2b14a731af0d
@@ -42,30 +42,25 @@ entryCSN: 20141122230659.195828Z#000000#008#000000
 modifiersName: cn=Manager,dc=$organization,dc=across
 modifyTimestamp: 20141122230659Z
 
-# teste:teste (user:passwd)
-dn: uid=teste,dc=$organization,dc=across
-objectClass: person
-objectClass: inetOrgPerson
-objectClass: posixAccount
-objectClass: eduPerson
-objectClass: brPerson
-objectClass: schacPersonalCharacteristics
-objectClass: across
-cn: Teste
-sn: ACROSS
-schacCountryOfCitizenship: Brazil
-mail: "across@gmail.com"
-eduPersonPrincipalName: teste@$organization.br
-homeDirectory: /home/$organization/teste
-uidNumber: 123456
-gidNumber: 5000
-structuralObjectClass: inetOrgPerson
-entryUUID: 963c0d52-06e8-1034-8f63-2b14a731af0d
-creatorsName: cn=Manager,dc=organization,dc=across
-createTimestamp: 20141122231108Z
-uid: teste
-userPassword:: {SSHA}HZlXg9WwMylJwyDjw+yMzLDHkWwtJFIl
-entryCSN: 20150219195733.337085Z#000000#008#000000
-modifiersName: cn=Manager,dc=$organization,dc=across
-modifyTimestamp: 20150219195733Z
+## teste:teste (user:passwd)
+#dn: uid=teste,dc=$organization,dc=across
+#objectClass: inetOrgPerson
+#objectClass: person
+#objectClass: schacPersonalCharacteristics
+#objectClass: across
+#cn: Teste
+#sn: ACROSS
+#schacCountryOfCitizenship: Brazil
+#mail: "across@gmail.com"
+#uidNumber: 123456
+#gidNumber: 5000
+#structuralObjectClass: inetOrgPerson
+#entryUUID: 963c0d52-06e8-1034-8f63-2b14a731af0d
+#creatorsName: cn=Manager,dc=organization,dc=across
+#createTimestamp: 20141122231108Z
+#uid: teste
+#userPassword: {SSHA}HZlXg9WwMylJwyDjw+yMzLDHkWwtJFIl
+#entryCSN: 20150219195733.337085Z#000000#008#000000
+#modifiersName: cn=Manager,dc=$organization,dc=across
+#modifyTimestamp: 20150219195733Z
 

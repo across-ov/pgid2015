@@ -44,15 +44,18 @@ echo "VO name (e.g. across) - Max 6 characters: "
 read -n6 organization
 echo ""
 
+# Setting cn=Manager password and sed
 echo "LDAP manager (cn=Manager,dc=$organization,dc=across) password: "
 read -s passwd
 
+echo $passwd
 # Converting to LDAP hash format
-password="$(slappasswd -s $passwd)"
+password="$(slappasswd -s $passwd)" 
+echo $password
 
 # replacing / to \/ for sed replaces
 password=${password/\//\\/}
-#echo $password
+echo $password
 
 
 echo ""
@@ -148,9 +151,9 @@ echo "# VO attributes schema from $organization" > $schema
          done
 
 echo "# --------------------------------------" >> $schema
-echo "# ObjectClasses" >> $schema
+echo "# Objectclass" >> $schema
 echo "# --------------------------------------" >> $schema
-echo "objectClass (1.3.6.1.4.1.4203.666.1.100 NAME 'across'" >> $schema
+echo "objectclass (1.3.6.1.4.1.4203.666.1.100 NAME 'across'" >> $schema
 echo "	DESC 'Across schema from $organization'" >> $schema
 #echo "	SUP 'top'" >> $schema
 echo "	AUXILIARY" >> $schema
@@ -222,6 +225,20 @@ service slapd start
 echo "*******************************************"
 echo "Validating Install and Configuration..."
 
-ldapsearch -D "cn=Manager,dc=$organization,dc=across" -x -w $password -b dc=across -s sub "objectclass=*"
+ldapsearch -D "cn=Manager,dc=$organization,dc=across" -x -w $passwd -b dc=across -s sub "objectclass=*"
 
+##############################
+echo ""
+echo "+++++++++++++++++++++++++++++++++++++"
+echo " Please, take note:"
+echo "+++++++++++++++++++++++++++++++++++++"
+echo " LDAP admin user: cn=Manager,dc=$organization,dc=across"
+echo " LDAP admin password: $passwd"
+echo " LDAP tree: dc=$organization,dc=across"
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo ""
+
+echo "APinstall.sh concluded."
+echo "Run AAinstall.sh now."
 # End
